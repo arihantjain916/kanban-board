@@ -7,6 +7,7 @@ import {
   DragOverlay,
   DragStartEvent,
   DragOverEvent,
+  DragEndEvent,
   PointerSensor,
   useSensor,
   useSensors,
@@ -75,7 +76,7 @@ export const KanbanBoard = () => {
       return;
     }
   }
-  function onDragEnd(event: DragStartEvent) {
+  function onDragEnd(event: DragEndEvent) {
     setActiveColumn(null);
     setActiveTask(null);
 
@@ -120,12 +121,13 @@ export const KanbanBoard = () => {
         return arrayMove(task, activeIndex, overIndex);
       });
     }
-    
 
     if (isActive && isOverACol) {
       setTask((task) => {
         const activeIndex = task.findIndex((task) => task.id === activeId);
-        task[activeIndex].columnId = overId
+        if (overId !== undefined) {
+          task[activeIndex].columnId = Number(overId);
+        }
         return arrayMove(task, activeIndex, activeIndex);
       });
     }
